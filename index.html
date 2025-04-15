@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAIDPUNK</title>
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --bg-light: #1a1a1a;
+            --text: rgba(255,255,255,0.85);
+            --text-secondary: rgba(255,255,255,0.6);
+            --primary: linear-gradient(135deg, #3a6dff 0%, #318eff 50%, #a1b4ff 100%);
+            --highlight: #3a6dff;
+            --glass: rgba(10, 10, 10, 0.1); /* 磨砂玻璃的颜色和透明度 */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* 首页专属背景 */
+        .hero {
+            background: 
+                linear-gradient(rgba(0,0,0,0.10), rgba(0,0,0,0.10)), /* 调节背景图的黑暗程度 */
+                url('https://s21.ax1x.com/2025/04/15/pEfBIm9.webp') center/cover;
+            min-height: 10vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 其他内容区块背景 */
+        section:not(.hero) {
+            background: var(--bg-dark);
+        }
+        
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: var(--primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+        
+        nav a:hover {
+            color: white;
+            background: rgba(58, 109, 255, 0.2);
+        }
+        
+        main {
+            margin-top: 0;
+        }
+        
+        /* 为首页背景区块添加补偿间距 */
+        .hero {
+            padding-top: 80px; 
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* 确保其他内容区块不受影响 */
+        section:not(.hero) {
+            padding-top: 100px;
+        }
+      
+        .hero-content {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            padding: 0 5%;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+            background: var(--primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            max-width: 600px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(58, 109, 255, 0.3);
+        }
+        
+        section {
+            padding: 100px 5%;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        /* 修改为链接样式 */
+        a.gallery-item {
+            display: block;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            aspect-ratio: 16/9;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        a.gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(58, 109, 255, 0.2);
+        }
+        
+        a.gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+        }
+        
+        a.gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .item-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            transform: translateY(100%);
+            transition: transform 0.4s;
+        }
+        
+        a.gallery-item:hover .item-info {
+            transform: translateY(0);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass);
+            color: var(--highlight);
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background: rgba(58, 109, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            /* 移动端始终显示信息 */
+            .item-info {
+                transform: translateY(0) !important;
+                opacity: 0.9;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="glass">
+        <div class="logo">MAIDPUNK</div>
+        <nav>
+            <a href="#games">游戏作品</a>
+            <a href="#illustrations">数字艺术</a>
+            <a href="#photography">视觉摄影</a>
+            <a href="#contact">社交网络</a>
+        </nav>
+    </header>
+    
+    <main>
+        <!-- 首页背景区 -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>MAIDPUNK</h1>
+                <p>欢迎来到我的个人网站，这里提供免费无广告的开源游戏与我个人的艺术作品</p>
+                <a href="#games" class="btn">浏览作品集</a>
+            </div>
+        </section>
+        
+        <!-- 游戏作品区 -->
+        <section id="games">
+            <h2 class="section-title">游戏项目</h2>
+            <div class="gallery" id="games-gallery">
+                <a href="https://example.com/game1" class="gallery-item glass" target="_blank">
+                    <img src="https://s21.ax1x.com/2025/04/15/pEfB9RU.jpg" alt="游戏项目1">
+                    <div class="item-info">
+                        <h3>色彩泛滥</h3>
+                        <p>休闲策略的双人对战游戏</p>
+                    </div>
+                </a>
+                <a href="https://example.com/game2" class="gallery-item glass" target="_blank">
+                    <img src="https://s21.ax1x.com/2025/04/15/pEfB9RU.jpg" alt="游戏项目2">
+                    <div class="item-info">
+                        <h3>量子迷宫</h3>
+                        <p>WebGL物理解谜游戏</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- 插画作品区 -->
+        <section id="illustrations">
+            <h2 class="section-title">数字艺术</h2>
+            <div class="gallery" id="illustration-gallery">
+                <a href="https://example.com/art1" class="gallery-item glass" target="_blank">
+                    <img src="https://images.unsplash.com/photo-1579547945413-497e1b99dac0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="数字艺术1">
+                    <div class="item-info">
+                        <h3>机械幻想</h3>
+                        <p>Blender + Substance Painter</p>
+                    </div>
+                </a>
+                <a href="https://example.com/art2" class="gallery-item glass" target="_blank">
+                    <img src="https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="数字艺术2">
+                    <div class="item-info">
+                        <h3>数字梦境</h3>
+                        <p>Cinema 4D + Octane渲染</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- 摄影作品区 -->
+        <section id="photography">
+            <h2 class="section-title">视觉摄影</h2>
+            <div class="gallery" id="photo-gallery">
+                <a href="https://example.com/photo1" class="gallery-item glass" target="_blank">
+                    <img src="https://images.unsplash.com/photo-1500534623283-312aade485b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="摄影作品1">
+                    <div class="item-info">
+                        <h3>霓虹都市</h3>
+                        <p>东京 · 2023</p>
+                    </div>
+                </a>
+                <a href="https://example.com/photo2" class="gallery-item glass" target="_blank">
+                    <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="摄影作品2">
+                    <div class="item-info">
+                        <h3>几何韵律</h3>
+                        <p>上海 · 2022</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- 联系区 -->
+        <section id="contact">
+            <h2 class="section-title">社交网络</h2>
+            <div style="text-align: center;">
+                <p style="margin-bottom: 30px; color: var(--text-secondary);">关注我的创作动态与最新作品</p>
+                <div class="social-links">
+                    <a href="mailto:your-email@example.com" title="电子邮件">✉️</a>
+                    <a href="https://www.xiaohongshu.com/user/yourid" target="_blank" title="小红书">📕</a>
+                    <a href="https://www.douyin.com/user/yourid" target="_blank" title="抖音">🎵</a>
+                    <a href="https://weibo.com/yourid" target="_blank" title="微博">🐦</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="glass">
+        <p>© 2024 MAIDPUNK · 用代码创造视觉奇迹</p>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 首页视差效果
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.pageYOffset;
+            document.querySelector('.hero').style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+        });
+    </script>
+</body>
+</html>
