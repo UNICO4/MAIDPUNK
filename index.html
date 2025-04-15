@@ -12,7 +12,7 @@
             --text-secondary: rgba(255,255,255,0.6);
             --primary: linear-gradient(135deg, #3a6dff 0%, #318eff 50%, #a1b4ff 100%);
             --highlight: #3a6dff;
-            --glass: rgba(10, 10, 10, 0.1); /* 磨砂玻璃的颜色和透明度 */
+            --glass: rgba(10, 10, 10, 0.1);
         }
         
         * {
@@ -28,17 +28,15 @@
             line-height: 1.6;
         }
 
-        /* 首页专属背景 */
         .hero {
             background: 
-                linear-gradient(rgba(0,0,0,0.10), rgba(0,0,0,0.10)), /* 调节背景图的黑暗程度 */
+                linear-gradient(rgba(0,0,0,0.10), rgba(0,0,0,0.10)),
                 url('https://s21.ax1x.com/2025/04/15/pEfrkU1.jpg') center/cover;
             min-height: 10vh;
             position: relative;
             overflow: hidden;
         }
 
-        /* 其他内容区块背景 */
         section:not(.hero) {
             background: var(--bg-dark);
         }
@@ -91,13 +89,11 @@
             margin-top: 0;
         }
         
-        /* 为首页背景区块添加补偿间距 */
         .hero {
             padding-top: 80px; 
             min-height: calc(100vh - 80px);
         }
         
-        /* 确保其他内容区块不受影响 */
         section:not(.hero) {
             padding-top: 100px;
         }
@@ -176,14 +172,14 @@
             gap: 25px;
         }
         
-        /* 修改为链接样式 */
+        /* 修改为4:3比例 */
         a.gallery-item {
             display: block;
             position: relative;
             overflow: hidden;
             border-radius: 10px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            aspect-ratio: 16/9;
+            aspect-ratio: 4/3; /* 修改这里 */
             text-decoration: none;
             color: inherit;
         }
@@ -201,7 +197,7 @@
         }
         
         a.gallery-item:hover img {
-            transform: scale(1.1);
+            transform: scale(1.05); /* 缩小缩放比例以适应4:3 */
         }
         
         .item-info {
@@ -209,7 +205,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 25px;
+            padding: 20px; /* 调整内边距 */
             background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             transform: translateY(100%);
             transition: transform 0.4s;
@@ -266,10 +262,10 @@
                 grid-template-columns: 1fr;
             }
             
-            /* 移动端始终显示信息 */
             .item-info {
                 transform: translateY(0) !important;
                 opacity: 0.9;
+                padding: 15px; /* 移动端调整 */
             }
         }
     </style>
@@ -286,16 +282,14 @@
     </header>
     
     <main>
-        <!-- 首页背景区 -->
         <section class="hero">
             <div class="hero-content">
                 <h1>MAIDPUNK</h1>
-                <p>欢迎来到我的个人网站，这里提供免费无广告的开源游戏与我个人的艺术作品</p>
+                <p>欢迎来到我的个人网站，这里有我制作的小游戏与宇宙第一牛逼的艺术作品</p>
                 <a href="#games" class="btn">浏览作品集</a>
             </div>
         </section>
         
-        <!-- 游戏作品区 -->
         <section id="games">
             <h2 class="section-title">游戏项目</h2>
             <div class="gallery" id="games-gallery">
@@ -316,49 +310,46 @@
             </div>
         </section>
         
-        <!-- 插画作品区 -->
         <section id="illustrations">
             <h2 class="section-title">数字艺术</h2>
             <div class="gallery" id="illustration-gallery">
-                <a href="https://example.com/art1" class="gallery-item glass" target="_blank">
-                    <img src="https://images.unsplash.com/photo-1579547945413-497e1b99dac0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="数字艺术1">
+                <a href="https://s21.ax1x.com/2025/04/15/pEfrZ8K.jpg" class="gallery-item glass" target="_blank">
+                    <img src="https://s21.ax1x.com/2025/04/15/pEfrZ8K.jpg" alt="数字艺术1">
                     <div class="item-info">
                         <h3>机械幻想</h3>
                         <p>Blender + Substance Painter</p>
                     </div>
                 </a>
                 <a href="https://example.com/art2" class="gallery-item glass" target="_blank">
-                    <img src="https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="数字艺术2">
+                    <img src="https://s21.ax1x.com/2025/04/15/pEfrMbd.jpg" alt="数字艺术2">
                     <div class="item-info">
-                        <h3>数字梦境</h3>
+                        <h3>富士山车神</h3>
                         <p>Cinema 4D + Octane渲染</p>
                     </div>
                 </a>
             </div>
         </section>
         
-        <!-- 摄影作品区 -->
         <section id="photography">
             <h2 class="section-title">视觉摄影</h2>
             <div class="gallery" id="photo-gallery">
                 <a href="https://example.com/photo1" class="gallery-item glass" target="_blank">
-                    <img src="https://images.unsplash.com/photo-1500534623283-312aade485b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="摄影作品1">
+                    <img src="https://s21.ax1x.com/2025/04/15/pEfrGPP.jpg" alt="摄影作品1">
                     <div class="item-info">
-                        <h3>霓虹都市</h3>
-                        <p>东京 · 2023</p>
+                        <h3>田园写真</h3>
+                        <p>乡坝头 · 2025</p>
                     </div>
                 </a>
                 <a href="https://example.com/photo2" class="gallery-item glass" target="_blank">
-                    <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="摄影作品2">
+                    <img src="https://s21.ax1x.com/2025/04/15/pEfr35t.jpg" alt="摄影作品2">
                     <div class="item-info">
-                        <h3>几何韵律</h3>
-                        <p>上海 · 2022</p>
+                        <h3>技校配不上大学</h3>
+                        <p>在废弃游乐园 · 2025</p>
                     </div>
                 </a>
             </div>
         </section>
         
-        <!-- 联系区 -->
         <section id="contact">
             <h2 class="section-title">社交网络</h2>
             <div style="text-align: center;">
@@ -378,7 +369,6 @@
     </footer>
 
     <script>
-        // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -388,7 +378,6 @@
             });
         });
 
-        // 首页视差效果
         window.addEventListener('scroll', function() {
             const scrollPosition = window.pageYOffset;
             document.querySelector('.hero').style.backgroundPositionY = `${scrollPosition * 0.5}px`;
