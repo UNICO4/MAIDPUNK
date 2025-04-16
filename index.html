@@ -10,8 +10,7 @@
             --bg-light: #1a1a1a;
             --text: rgba(255,255,255,0.85);
             --text-secondary: rgba(255,255,255,0.6);
-            --primary: linear-gradient(135deg, #3a6dff 0%, #318eff 50%, #a1b4ff 100%);
-            --highlight: #3a6dff;
+            --primary: linear-gradient(135deg, #e185ff 0%, #696dff 80%, #6ba6ff 100%);
             --glass: rgba(10, 10, 10, 0.1);
         }
         
@@ -30,8 +29,8 @@
 
         .hero {
             background: 
-                linear-gradient(rgba(0,0,0,0.10), rgba(0,0,0,0.10)),
-                url('https://s21.ax1x.com/2025/04/15/pEfrkU1.jpg') center/cover;
+                linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.90)),
+                url('https://s21.ax1x.com/2025/04/17/pEhK8KS.jpg') center/cover;
             min-height: 10vh;
             position: relative;
             overflow: hidden;
@@ -63,7 +62,7 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: -2px;
             background: var(--primary);
             -webkit-background-clip: text;
             background-clip: text;
@@ -79,10 +78,11 @@
             padding: 8px 12px;
             border-radius: 20px;
         }
-        
+      
+        /*顶部导航栏按钮悬浮颜色 */
         nav a:hover {
             color: white;
-            background: rgba(58, 109, 255, 0.2);
+            background: rgba(151, 109, 255, 0.4);
         }
         
         main {
@@ -137,10 +137,11 @@
             border: none;
             cursor: pointer;
         }
-        
+      
+        /*首页按钮悬浮颜色 */
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(58, 109, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(151, 109, 255, 0.2);
         }
         
         section {
@@ -183,10 +184,11 @@
             text-decoration: none;
             color: inherit;
         }
-        
+      
+        /*画廊悬浮颜色 */        
         a.gallery-item:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(58, 109, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(128, 109, 255, 0.4);
         }
         
         a.gallery-item img {
@@ -235,9 +237,10 @@
             transition: all 0.3s;
             text-decoration: none;
         }
-        
+      
+        /*社交图标悬浮颜色 */         
         .social-links a:hover {
-            background: rgba(58, 109, 255, 0.2);
+            background: rgba(128, 109, 255, 0.4);
             transform: translateY(-5px);
         }
         
@@ -296,25 +299,17 @@
                 <a href="https://unico4.github.io/Color/" class="gallery-item glass" target="_blank">
                     <img src="https://s21.ax1x.com/2025/04/16/pEhnSr4.jpg" alt="游戏项目1">
                     <div class="item-info">
-                        <h3>色彩泛滥</h3>
-                        <p>休闲策略的双人对战游戏</p>
                     </div>
                 </a>
-                <a href="https://example.com/game2" class="gallery-item glass" target="_blank">
-                    <img src="https://s21.ax1x.com/2025/04/15/pEfB9RU.jpg" alt="游戏项目2">
-                    <div class="item-info">
-                        <h3>量子迷宫</h3>
-                        <p>WebGL物理解谜游戏</p>
-                    </div>
-                </a>
+
             </div>
         </section>
         
         <section id="illustrations">
             <h2 class="section-title">数字艺术</h2>
             <div class="gallery" id="illustration-gallery">
-                <a href="https://s21.ax1x.com/2025/04/15/pEfrZ8K.jpg" class="gallery-item glass" target="_blank">
-                    <img src="https://s21.ax1x.com/2025/04/15/pEfrZ8K.jpg" alt="数字艺术1">
+                <a href="https://s21.ax1x.com/2025/04/16/pEhndds.jpg" class="gallery-item glass" target="_blank">
+                    <img src="https://s21.ax1x.com/2025/04/16/pEhndds.jpg" alt="数字艺术1">
                     <div class="item-info">
                         <h3>机械幻想</h3>
                         <p>Blender + Substance Painter</p>
@@ -334,14 +329,14 @@
             <h2 class="section-title">视觉摄影</h2>
             <div class="gallery" id="photo-gallery">
                 <a href="https://example.com/photo1" class="gallery-item glass" target="_blank">
-                    <img src="https://s21.ax1x.com/2025/04/15/pEfrGPP.jpg" alt="摄影作品1">
+                    <img src="https://s21.ax1x.com/2025/04/16/pEhnrWV.jpg" alt="摄影作品1">
                     <div class="item-info">
                         <h3>田园写真</h3>
                         <p>乡坝头 · 2025</p>
                     </div>
                 </a>
                 <a href="https://example.com/photo2" class="gallery-item glass" target="_blank">
-                    <img src="https://s21.ax1x.com/2025/04/15/pEfr35t.jpg" alt="摄影作品2">
+                    <img src="https://s21.ax1x.com/2025/04/16/pEhnaZj.jpg" alt="摄影作品2">
                     <div class="item-info">
                         <h3>技校配不上大学</h3>
                         <p>在废弃游乐园 · 2025</p>
