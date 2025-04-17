@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MAIDPUNK</title>
     <style>
         :root {
@@ -12,6 +12,7 @@
             --text-secondary: rgba(255,255,255,0.6);
             --primary: linear-gradient(135deg, #e185ff 0%, #696dff 80%, #6ba6ff 100%);
             --glass: rgba(10, 10, 10, 0.1);
+            --divider: rgba(255,255,255,0.1);
         }
         
         * {
@@ -19,12 +20,14 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Helvetica Neue', Arial, sans-serif;
+            touch-action: manipulation;
         }
         
         body {
             background: var(--bg-dark);
             color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .hero {
@@ -108,6 +111,11 @@
             padding: 0 5%;
         }
         
+        .hero-logo {
+            width: 200px; /* 可根据需要调整 LOGO 宽度 */
+            margin-bottom: 20px;
+        }
+        
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
@@ -183,6 +191,7 @@
             aspect-ratio: 4/3; /* 修改这里 */
             text-decoration: none;
             color: inherit;
+            cursor: pointer;
         }
       
         /*画廊悬浮颜色 */        
@@ -252,6 +261,207 @@
             border-top: 1px solid rgba(255,255,255,0.1);
         }
         
+        /* 大图查看器样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+            touch-action: none;
+        }
+        
+        .modal-content {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-light);
+            position: relative;
+        }
+        
+        .image-viewer-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .image-slider {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            will-change: transform;
+        }
+        
+        .slide {
+            flex: 0 0 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            touch-action: none;
+        }
+        
+        .main-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s;
+            transform-origin: center center;
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+        
+        .main-image.grabbing {
+            cursor: grabbing;
+        }
+        
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-button:hover {
+            opacity: 1;
+        }
+        
+        .prev {
+            left: 20px;
+        }
+        
+        .next {
+            right: 20px;
+        }
+        
+        .info-panel {
+            width: 100%;
+            background: var(--bg-light);
+            padding: 15px 20px 10px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+        
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px 0;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+        
+        .thumbnail-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .thumbnail-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 3px;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .thumbnail:hover, .thumbnail.active {
+            border-color: #696dff;
+        }
+        
+        .divider {
+            height: 1px;
+            background: var(--divider);
+            margin: 10px 0;
+        }
+        
+        .description-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .description-text {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #f1f1f1;
+            font-size: 24px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 1001;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+        }
+        
+        .close:hover {
+            color: #696dff;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .image-counter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+        
         @media (max-width: 768px) {
             nav {
                 display: none;
@@ -268,7 +478,36 @@
             .item-info {
                 transform: translateY(0) !important;
                 opacity: 0.9;
-                padding: 15px; /* 移动端调整 */
+                padding: 15px;
+            }
+            
+            .nav-button {
+                display: none;
+            }
+            
+            .info-panel {
+                padding: 10px 15px 5px;
+            }
+            
+            .thumbnail {
+                width: 60px;
+                height: 45px;
+            }
+            
+            .description-title {
+                font-size: 1.3rem;
+            }
+            
+            .close {
+                top: 15px;
+                right: 15px;
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+            
+            .modal-buttons {
+                margin-top: 10px;
             }
         }
     </style>
@@ -287,6 +526,7 @@
     <main>
         <section class="hero">
             <div class="hero-content">
+                <img src="https://s21.ax1x.com/2025/04/18/pEhffHK.png" alt="LOGO" class="hero-logo">
                 <h1>MAIDPUNK</h1>
                 <p>欢迎来到我的个人网站，这里有我制作的小游戏与宇宙第一牛逼的艺术作品</p>
                 <a href="#games" class="btn">浏览作品集</a>
@@ -296,24 +536,23 @@
         <section id="games">
             <h2 class="section-title">游戏项目</h2>
             <div class="gallery" id="games-gallery">
-                <a href="https://unico4.github.io/Color/" class="gallery-item glass" target="_blank">
+                <a href="https://unico4.github.io/Color/" class="gallery-item glass" target="_self">
                     <img src="https://s21.ax1x.com/2025/04/16/pEhnSr4.jpg" alt="游戏项目1">
                 </a>
-
             </div>
         </section>
         
         <section id="illustrations">
             <h2 class="section-title">数字艺术</h2>
             <div class="gallery" id="illustration-gallery">
-                <a href="https://s21.ax1x.com/2025/04/16/pEhndds.jpg" class="gallery-item glass" target="_blank">
+                <a class="gallery-item glass" data-title="机械幻想" data-description="这是我使用Blender和Substance Painter创作的机械幻想系列作品之一。灵感来源于赛博朋克美学和未来主义设计，展现了机械与生命的完美融合。创作耗时约30小时，使用了PBR材质和动态照明技术。" data-images='["https://s21.ax1x.com/2025/04/16/pEhndds.jpg", "https://s21.ax1x.com/2025/04/15/pEfrMbd.jpg", "https://s21.ax1x.com/2025/04/16/pEhnrWV.jpg"]'>
                     <img src="https://s21.ax1x.com/2025/04/16/pEhndds.jpg" alt="数字艺术1">
                     <div class="item-info">
                         <h3>机械幻想</h3>
                         <p>Blender + Substance Painter</p>
                     </div>
                 </a>
-                <a href="https://example.com/art2" class="gallery-item glass" target="_blank">
+                <a class="gallery-item glass" data-title="富士山车神" data-description="使用Cinema 4D和Octane渲染器创作的超现实风格作品。将日本富士山与复古赛车结合，创造出独特的视觉冲击。作品中的云雾效果使用体积渲染技术实现，车体材质经过精心调节以达到金属漆效果。" data-images='["https://s21.ax1x.com/2025/04/15/pEfrMbd.jpg", "https://s21.ax1x.com/2025/04/16/pEhnSr4.jpg"]'>
                     <img src="https://s21.ax1x.com/2025/04/15/pEfrMbd.jpg" alt="数字艺术2">
                     <div class="item-info">
                         <h3>富士山车神</h3>
@@ -326,14 +565,14 @@
         <section id="photography">
             <h2 class="section-title">视觉摄影</h2>
             <div class="gallery" id="photo-gallery">
-                <a href="https://example.com/photo1" class="gallery-item glass" target="_blank">
+                <a class="gallery-item glass" data-title="田园写真" data-description="2025年春季在乡间拍摄的系列照片之一。使用Sony A7R IV相机搭配85mm f/1.4镜头拍摄，后期使用Lightroom调色。这组作品捕捉了乡村生活的宁静与自然之美，展现了季节更替的微妙变化。" data-images='["https://s21.ax1x.com/2025/04/16/pEhnrWV.jpg", "https://s21.ax1x.com/2025/04/16/pEhnaZj.jpg"]'>
                     <img src="https://s21.ax1x.com/2025/04/16/pEhnrWV.jpg" alt="摄影作品1">
                     <div class="item-info">
                         <h3>田园写真</h3>
                         <p>乡坝头 · 2025</p>
                     </div>
                 </a>
-                <a href="https://example.com/photo2" class="gallery-item glass" target="_blank">
+                <a class="gallery-item glass" data-title="技校配不上大学" data-description="在废弃游乐园创作的观念摄影作品。通过荒废的游乐设施与青春模特的对比，探讨教育与社会阶层的话题。使用双重曝光和特殊滤镜处理，增强了作品的超现实感和叙事性。" data-images='["https://s21.ax1x.com/2025/04/16/pEhnaZj.jpg", "https://s21.ax1x.com/2025/04/16/pEhnrWV.jpg"]'>
                     <img src="https://s21.ax1x.com/2025/04/16/pEhnaZj.jpg" alt="摄影作品2">
                     <div class="item-info">
                         <h3>技校配不上大学</h3>
@@ -361,7 +600,34 @@
         <p>© 2024 MAIDPUNK · 宇宙第一的视觉艺术家</p>
     </footer>
 
+    <!-- 大图查看器模态框 -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <div class="image-viewer-container">
+                <div class="image-counter" id="imageCounter">1/3</div>
+                <button class="nav-button prev">&lt;</button>
+                <div class="image-slider" id="imageSlider">
+                    <!-- 图片将通过JavaScript动态添加 -->
+                </div>
+                <button class="nav-button next">&gt;</button>
+            </div>
+            <div class="info-panel">
+                <div class="thumbnail-container" id="thumbnailContainer">
+                    <!-- 缩略图将通过JavaScript动态添加 -->
+                </div>
+                <div class="divider"></div>
+                <h3 id="imageTitle" class="description-title"></h3>
+                <p id="imageDescription" class="description-text"></p>
+                <div class="modal-buttons">
+                    <a href="#" id="xiaohongshuBtn" class="btn" target="_blank">访问我的小红书</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -371,10 +637,282 @@
             });
         });
 
+        // 视差效果
         window.addEventListener('scroll', function() {
             const scrollPosition = window.pageYOffset;
             document.querySelector('.hero').style.backgroundPositionY = `${scrollPosition * 0.5}px`;
         });
-    </script>
-</body>
-</html>
+
+        // 大图查看器功能
+        const modal = document.getElementById("imageModal");
+        const imageSlider = document.getElementById("imageSlider");
+        const imageTitle = document.getElementById("imageTitle");
+        const imageDescription = document.getElementById("imageDescription");
+        const thumbnailContainer = document.getElementById("thumbnailContainer");
+        const xiaohongshuBtn = document.getElementById("xiaohongshuBtn");
+        const closeBtn = document.querySelector(".close");
+        const prevBtn = document.querySelector(".prev");
+        const nextBtn = document.querySelector(".next");
+        const imageCounter = document.getElementById("imageCounter");
+
+        // 小红书主页链接
+        const xiaohongshuUrl = "https://www.xiaohongshu.com/user/profile/5b47174c4eacab6a24d09edc";
+        xiaohongshuBtn.href = xiaohongshuUrl;
+
+        // 当前查看的图片索引
+        let currentImageIndex = 0;
+        let currentImages = [];
+        let slides = [];
+        let isMobile = window.innerWidth <= 768;
+        let startX = 0;
+        let currentX = 0;
+        let isSwiping = false;
+        let currentScale = 1;
+        let startDistance = 0;
+        let currentDistance = 0;
+
+        // 为所有画廊项添加点击事件
+        document.querySelectorAll('.gallery-item[data-images]').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentImages = JSON.parse(this.getAttribute('data-images'));
+                const title = this.getAttribute('data-title');
+                const description = this.getAttribute('data-description');
+                
+                // 清空并重新填充图片滑块
+                imageSlider.innerHTML = '';
+                slides = [];
+                currentImages.forEach((imgSrc, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.className = 'main-image';
+                    img.alt = `${title} - 图片 ${index + 1}`;
+                    
+                    slide.appendChild(img);
+                    imageSlider.appendChild(slide);
+                    slides.push(slide);
+                });
+                
+                // 设置标题和描述
+                imageTitle.textContent = title;
+                imageDescription.textContent = description;
+                
+                // 清空并重新填充缩略图容器
+                thumbnailContainer.innerHTML = '';
+                
+                // 添加缩略图
+                currentImages.forEach((imgSrc, index) => {
+                    const thumbnail = document.createElement('img');
+                    thumbnail.src = imgSrc;
+                    thumbnail.className = 'thumbnail';
+                    if (index === 0) thumbnail.classList.add('active');
+                    
+                    thumbnail.addEventListener('click', function() {
+                        goToSlide(index);
+                    });
+                    
+                    thumbnailContainer.appendChild(thumbnail);
+                });
+                
+                // 更新图片计数器
+                updateImageCounter();
+                
+                // 显示模态框
+                modal.style.display = "block";
+                document.body.style.overflow = "hidden";
+                
+                // 重置为第一张图片
+                currentImageIndex = 0;
+                updateSliderPosition();
+                
+                // 添加触摸和缩放事件
+                setupTouchEvents();
+                setupZoomEvents();
+            });
+        });
+
+        // 更新滑块位置
+        function updateSliderPosition() {
+            imageSlider.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
+            imageSlider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+            
+            // 更新活动缩略图
+            document.querySelectorAll('.thumbnail').forEach((t, i) => {
+                t.classList.toggle('active', i === currentImageIndex);
+            });
+            
+            updateImageCounter();
+        }
+
+        // 跳转到指定幻灯片
+        function goToSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= currentImages.length) index = currentImages.length - 1;
+            
+            currentImageIndex = index;
+            updateSliderPosition();
+            
+            // 滚动到对应的缩略图
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            if (thumbnails[index]) {
+                thumbnails[index].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
+        }
+
+        // 更新图片计数器
+        function updateImageCounter() {
+            imageCounter.textContent = `${currentImageIndex + 1}/${currentImages.length}`;
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+            // 重置所有图片的缩放
+            slides.forEach(slide => {
+                const img = slide.querySelector('.main-image');
+                if (img) {
+                    img.style.transform = 'scale(1)';
+                }
+            });
+        }
+
+        // 设置触摸滑动事件
+        function setupTouchEvents() {
+            // 移除旧的事件监听器
+            imageSlider.removeEventListener('touchstart', handleTouchStart);
+            imageSlider.removeEventListener('touchmove', handleTouchMove);
+            imageSlider.removeEventListener('touchend', handleTouchEnd);
+            
+            // 添加新的事件监听器
+            imageSlider.addEventListener('touchstart', handleTouchStart, { passive: false });
+            imageSlider.addEventListener('touchmove', handleTouchMove, { passive: false });
+            imageSlider.addEventListener('touchend', handleTouchEnd, { passive: true });
+        }
+
+        function handleTouchStart(e) {
+            if (e.touches.length === 1) {
+                startX = e.touches[0].clientX;
+                currentX = startX;
+                isSwiping = true;
+                imageSlider.style.transition = 'none';
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (!isSwiping || e.touches.length !== 1) return;
+            
+            e.preventDefault();
+            currentX = e.touches[0].clientX;
+            const diff = currentX - startX;
+            
+            // 临时移动效果
+            imageSlider.style.transform = `translateX(calc(-${currentImageIndex * 100}% + ${diff}px))`;
+        }
+
+        function handleTouchEnd() {
+            if (!isSwiping) return;
+            isSwiping = false;
+            
+            const diff = currentX - startX;
+            const threshold = window.innerWidth / 4; // 滑动阈值
+            const velocity = Math.abs(diff) / 100; // 简单速度计算
+            
+            if (Math.abs(diff) > threshold || velocity > 0.5) {
+                if (diff > 0) {
+                    goToSlide(currentImageIndex - 1);
+                } else {
+                    goToSlide(currentImageIndex + 1);
+                }
+            } else {
+                // 回到原位置
+                updateSliderPosition();
+            }
+        }
+
+        // 设置图片缩放事件
+        function setupZoomEvents() {
+            slides.forEach(slide => {
+                const img = slide.querySelector('.main-image');
+                if (!img) return;
+                
+                // 移除旧的事件监听器
+                img.removeEventListener('wheel', handleWheel);
+                img.removeEventListener('touchstart', handleZoomStart);
+                img.removeEventListener('touchmove', handleZoomMove);
+                
+                // 添加新的事件监听器
+                img.addEventListener('wheel', handleWheel, { passive: false });
+                img.addEventListener('touchstart', handleZoomStart, { passive: false });
+                img.addEventListener('touchmove', handleZoomMove, { passive: false });
+            });
+        }
+
+        function handleWheel(e) {
+            e.preventDefault();
+            
+            const delta = e.deltaY || e.detail || e.wheelDelta;
+            const scaleAmount = 0.1;
+            const img = e.target;
+            
+            if (delta < 0) {
+                // 放大
+                currentScale += scaleAmount;
+            } else {
+                // 缩小，但不能小于原始大小
+                currentScale = Math.max(1, currentScale - scaleAmount);
+            }
+            
+            img.style.transform = `scale(${currentScale})`;
+        }
+
+        function handleZoomStart(e) {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                startDistance = getDistance(e.touches[0], e.touches[1]);
+                currentScale = parseFloat(e.target.style.transform.replace('scale(', '') || 1);
+            }
+        }
+
+        function handleZoomMove(e) {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                currentDistance = getDistance(e.touches[0], e.touches[1]);
+                const scale = currentDistance / startDistance * currentScale;
+                e.target.style.transform = `scale(${Math.max(1, scale)})`;
+            }
+        }
+
+        function getDistance(touch1, touch2) {
+            return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+            );
+        }
+
+        // 事件监听
+        closeBtn.addEventListener('click', closeModal);
+        prevBtn.addEventListener('click', () => goToSlide(currentImageIndex - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentImageIndex + 1));
+
+        // 点击模态框外部关闭
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // 键盘导航
+        document.addEventListener('keydown', function(event) {
+            if (modal.style.display === "block") {
+                if (event.key === "Escape") {
+                    closeModal();
+                } else if (event.key === "ArrowLeft") {
+                    goToSlide(currentImageIndex - 1);
