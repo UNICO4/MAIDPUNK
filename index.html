@@ -111,9 +111,16 @@
             padding: 0 5%;
         }
         
-        .hero-logo {
-            width: 200px; /* 可根据需要调整 LOGO 宽度 */
+        .logo-image {
+            width: 180px;
+            height: auto;
             margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(105, 109, 255, 0.5));
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-image:hover {
+            transform: scale(1.05);
         }
         
         .hero h1 {
@@ -481,6 +488,11 @@
                 padding: 15px;
             }
             
+            .logo-image {
+                width: 140px;
+                margin-bottom: 15px;
+            }
+            
             .nav-button {
                 display: none;
             }
@@ -526,7 +538,7 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <img src="https://s21.ax1x.com/2025/04/18/pEhffHK.png" alt="LOGO" class="hero-logo">
+                <img src="https://s21.ax1x.com/2025/04/18/pEhffHK.png" alt="MAIDPUNK Logo" class="logo-image">
                 <h1>MAIDPUNK</h1>
                 <p>欢迎来到我的个人网站，这里有我制作的小游戏与宇宙第一牛逼的艺术作品</p>
                 <a href="#games" class="btn">浏览作品集</a>
@@ -916,3 +928,19 @@
                     closeModal();
                 } else if (event.key === "ArrowLeft") {
                     goToSlide(currentImageIndex - 1);
+                } else if (event.key === "ArrowRight") {
+                    goToSlide(currentImageIndex + 1);
+                }
+            }
+        });
+
+        // 窗口大小变化检测
+        window.addEventListener('resize', function() {
+            isMobile = window.innerWidth <= 768;
+            if (modal.style.display === "block") {
+                updateSliderPosition();
+            }
+        });
+    </script>
+</body>
+</html>
